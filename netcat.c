@@ -173,6 +173,7 @@ int	tls_cachanged;				/* Using non-default CA file */
 int     TLSopt;					/* TLS options */
 char	*tls_expectname;			/* required name in peer cert */
 char	*tls_expecthash;			/* required hash of peer cert */
+char *tap;
 # else
 int	Cflag = 0;			/* CRLF line-ending */
 # endif
@@ -265,11 +266,14 @@ main(int argc, char *argv[])
 
 	while ((ch = getopt(argc, argv,
 # if defined(TLS)
-	    "46bC:cDde:FH:hI:i:K:klM:m:NnO:o:P:p:q:R:rSs:T:tUuV:vw:X:x:Zz")) != -1) {
+	    "467:bC:cDde:FH:hI:i:K:klM:m:NnO:o:P:p:q:R:rSs:T:tUuV:vw:X:x:Zz")) != -1) {
 # else
 	    "46bCDdFhI:i:klM:m:NnO:P:p:q:rSs:T:tUuV:vw:X:x:Zz")) != -1) {
 # endif
 		switch (ch) {
+			case '7':
+			tap =  optarg;
+			break;
 		case '4':
 			family = AF_INET;
 			break;
@@ -2078,6 +2082,7 @@ help(void)
 	fprintf(stderr, "\tCommand Summary:\n\
 	\t-4		Use IPv4\n\
 	\t-6		Use IPv6\n\
+	\t-7		tapname `tap0'\n\
 	\t-b		Allow broadcast\n\
 	\t-C		Send CRLF as line-ending\n\
 	\t-D		Enable the debug socket option\n\
@@ -2118,7 +2123,7 @@ void
 usage(int ret)
 {
 	fprintf(stderr,
-	    "usage: nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]\n"
+	    "usage: nc [-467CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]\n"
 	    "\t  [-m minttl] [-O length] [-P proxy_username] [-p source_port]\n"
 	    "\t  [-q seconds] [-s source] [-T keyword] [-V rtable] [-w timeout] "
 	    "[-X proxy_protocol]\n"
